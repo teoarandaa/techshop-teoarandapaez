@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Comanda Confirmada - TechShop{% endblock %}
+
+{% block content %}
+<div class="confirmation-container">
+    <div class="confirmation-header">
+        <div class="success-icon">✓</div>
+        <h1>Comanda Confirmada!</h1>
+        <p class="confirmation-message">Gràcies per la teva compra. La teva comanda ha estat processada correctament.</p>
+    </div>
+
+    <div class="order-details">
+        <h2>Detalls de la Comanda</h2>
+        <div class="order-info">
+            <p><strong>Número de Comanda:</strong> #{{ order_details.order.id }}</p>
+            <p><strong>Data:</strong> {{ order_details.order.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+            <p><strong>Total:</strong> {{ "%.2f"|format(order_details.order.total) }} €</p>
+        </div>
+
+        <h3>Productes</h3>
+        <div class="order-items">
+            {% for item in order_details.order_items %}
+            <div class="order-item">
+                <span class="item-name">{{ item.product.name }}</span>
+                <span class="item-quantity">x{{ item.quantity }}</span>
+                <span class="item-price">{{ "%.2f"|format(item.subtotal) }} €</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="order-total">
+            <span>Total:</span>
+            <span class="total-amount">{{ "%.2f"|format(order_details.order.total) }} €</span>
+        </div>
+    </div>
+
+    <div class="confirmation-actions">
+        <a href="{{ url_for('products.show_products') }}" class="btn btn-primary">Continuar Comprant</a>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Tornar a l'Inici</a>
+    </div>
+
+    <div class="confirmation-note">
+        <p>Rebràs un correu electrònic de confirmació amb els detalls de la teva comanda.</p>
+        <p>El teu enviament arribarà en 24-48 hores.</p>
+    </div>
+</div>
+{% endblock %}
+

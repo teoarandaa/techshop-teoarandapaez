@@ -1,0 +1,251 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║              🛍️  BENVINGUT A TECHSHOP! 🛍️                        ║
+║                                                                   ║
+║         Aplicació E-commerce amb Arquitectura MVC                ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+INICI RÀPID (5 minuts) 🚀
+══════════════════════════════════════════════════════════════════
+
+1. Obre una terminal i navega al directori:
+   cd techshop-teoarandapaez
+
+2. Crea un entorn virtual:
+   python3 -m venv venv
+
+3. Activa l'entorn virtual:
+   
+   macOS/Linux:
+   source venv/bin/activate
+   
+   Windows:
+   venv\Scripts\activate
+
+4. Instal·la les dependències:
+   pip install -r requirements.txt
+
+5. Inicialitza la base de dades (15 productes):
+   python init_db.py
+
+6. Executa l'aplicació:
+   python app.py
+
+7. Obre el navegador:
+   http://localhost:5000
+
+✅ LLEST! L'aplicació hauria d'estar funcionant!
+
+
+DOCUMENTACIÓ 📚
+══════════════════════════════════════════════════════════════════
+
+📖 COMENÇAR AQUÍ:
+   README.md - Instruccions completes d'execució
+
+📝 MEMÒRIA DE LA PRÀCTICA:
+   MEMORIA_PRACTICA.md - Document principal
+
+🏗️ ARQUITECTURA TÈCNICA:
+   ARQUITECTURA.md - Diagrames i explicacions tècniques
+
+🧪 GUIA DE PROVES:
+   INSTRUCCIONS_PROVA.md - Com provar totes les funcionalitats
+
+📊 RESUM EXECUTIU:
+   RESUM_PROJECTE.md - Vista general del projecte
+
+✅ CHECKLIST COMPLET:
+   CHECKLIST_LLIURAMENT.md - Verificació de requisits
+
+
+ESTRUCTURA DEL PROJECTE 🗂️
+══════════════════════════════════════════════════════════════════
+
+techshop-teoarandapaez/
+│
+├── 📄 app.py                  ← Punt d'entrada principal
+├── 📄 database.py             ← Gestió de base de dades
+├── 📄 init_db.py             ← Script d'inicialització
+│
+├── 📁 models/                 ← Entitats de dades
+│   ├── user.py
+│   ├── product.py
+│   ├── order.py
+│   └── order_item.py
+│
+├── 📁 repositories/           ← Accés a base de dades
+│   ├── user_repository.py
+│   ├── product_repository.py
+│   ├── order_repository.py
+│   └── order_item_repository.py
+│
+├── 📁 services/               ← Lògica de negoci
+│   ├── cart_service.py
+│   ├── order_service.py
+│   └── user_service.py
+│
+├── 📁 routes/                 ← Controladors HTTP
+│   ├── product_routes.py
+│   ├── cart_routes.py
+│   └── order_routes.py
+│
+├── 📁 templates/              ← Plantilles HTML
+│   ├── base.html
+│   ├── index.html
+│   ├── products.html
+│   ├── cart.html
+│   ├── checkout.html
+│   └── order_confirmation.html
+│
+└── 📁 static/                 ← CSS i JavaScript
+    ├── css/style.css
+    └── js/main.js
+
+
+FUNCIONALITATS PRINCIPALS ⚡
+══════════════════════════════════════════════════════════════════
+
+✅ Catàleg de 15 productes electrònics
+✅ Carretó de compres amb sessions
+✅ Validacions client + servidor
+✅ Màxim 5 unitats per producte
+✅ Control d'inventari en temps real
+✅ Checkout amb formulari validat
+✅ Creació de comandes
+✅ Interfície moderna i responsive
+✅ Contrasenyes hasheades (bcrypt)
+✅ Prevenció d'SQL injection
+
+
+ARQUITECTURA 🏗️
+══════════════════════════════════════════════════════════════════
+
+MODEL-VISTA-CONTROLADOR (MVC):
+
+┌─────────────────┐
+│  VISTA (View)   │  templates/ + static/
+├─────────────────┤
+│ CONTROLADOR     │  routes/ + services/
+├─────────────────┤
+│  MODEL (Model)  │  models/ + repositories/
+└─────────────────┘
+
+TRES CAPES:
+1. Presentació → HTML, CSS, JavaScript
+2. Lògica de Negoci → Services, Routes
+3. Dades → Repositories, Database
+
+
+PROVES RÀPIDES 🧪
+══════════════════════════════════════════════════════════════════
+
+Després d'executar l'app:
+
+1. Navega a http://localhost:5000
+2. Clica "Explorar Productes"
+3. Afegeix alguns productes al carretó (1-5 unitats)
+4. Vés al carretó i comprova els totals
+5. Clica "Finalitzar Compra"
+6. Omple el formulari:
+   - Username: testuser2025
+   - Password: password123
+   - Email: test@example.com
+   - Adreça: Carrer Example 123, Barcelona, 08001
+7. Confirma la comanda
+8. Veuràs la pàgina de confirmació!
+
+Per proves més detallades, consulta INSTRUCCIONS_PROVA.md
+
+
+REQUISITS DEL SISTEMA 💻
+══════════════════════════════════════════════════════════════════
+
+- Python 3.8 o superior
+- pip (gestor de paquets)
+- Navegador web modern
+- 50 MB d'espai lliure
+
+
+TECNOLOGIES UTILITZADES 🛠️
+══════════════════════════════════════════════════════════════════
+
+Backend:
+- Python 3.x
+- Flask 3.0.0
+- SQLite 3.x
+- bcrypt 4.1.1
+
+Frontend:
+- HTML5
+- CSS3 (Grid, Flexbox)
+- JavaScript (ES6)
+- Jinja2 (templates)
+
+
+PROBLEMES COMUNS I SOLUCIONS 🔧
+══════════════════════════════════════════════════════════════════
+
+❌ Error: "No module named 'flask'"
+   ✅ Solució: pip install -r requirements.txt
+
+❌ Error: "Port 5000 in use"
+   ✅ Solució: Canvia el port a app.py (línia final)
+              app.run(debug=True, port=5001)
+
+❌ Error: "Database is locked"
+   ✅ Solució: Tanca altres connexions a techshop.db
+
+❌ La base de dades no es crea
+   ✅ Solució: python init_db.py --reset
+
+
+CONTACTE I SUPORT 📞
+══════════════════════════════════════════════════════════════════
+
+Autor: Teo Aranda Paez
+Assignatura: IA & Big Data
+Institució: La Salle
+Data: Octubre 2025
+
+Per consultes sobre el projecte, revisa primer:
+1. README.md
+2. MEMORIA_PRACTICA.md
+3. INSTRUCCIONS_PROVA.md
+
+
+CRÈDITS I AGRAÏMENTS 🙏
+══════════════════════════════════════════════════════════════════
+
+Aquest projecte ha estat desenvolupat com a pràctica acadèmica
+aplicant els principis d'arquitectura de software professional.
+
+S'ha utilitzat Claude (Anthropic) com a assistent d'IA, sempre
+amb criteri crític i validació manual de tot el codi generat.
+
+Tecnologies de codi obert utilitzades:
+- Flask (Pallets Projects)
+- SQLite
+- bcrypt (Python Cryptographic Authority)
+
+
+LLICÈNCIA 📄
+══════════════════════════════════════════════════════════════════
+
+Aquest projecte és material educatiu desenvolupat per a la
+pràctica de l'assignatura d'IA & Big Data a La Salle.
+
+
+═════════════════════════════════════════════════════════════════
+
+            💡 CONSELL: Comença per llegir README.md
+
+═════════════════════════════════════════════════════════════════
+
+                  Gaudeix explorant TechShop! 🎉
+
+                   Desenvolupat amb dedicació ❤️
+
+═════════════════════════════════════════════════════════════════
+

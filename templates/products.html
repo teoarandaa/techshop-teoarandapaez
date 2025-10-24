@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Productes - TechShop{% endblock %}
+
+{% block content %}
+<h1>Els Nostres Productes</h1>
+
+{% if products %}
+<div class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <div class="product-image">
+            <div class="product-icon">📱</div>
+        </div>
+        <div class="product-info">
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-price">{{ "%.2f"|format(product.price) }} €</p>
+            <p class="product-stock">
+                {% if product.stock > 0 %}
+                    <span class="stock-available">En stock ({{ product.stock }} unitats)</span>
+                {% else %}
+                    <span class="stock-unavailable">Sense stock</span>
+                {% endif %}
+            </p>
+        </div>
+        <div class="product-actions">
+            {% if product.stock > 0 %}
+            <form action="{{ url_for('cart.add_to_cart') }}" method="POST" class="add-to-cart-form">
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <div class="quantity-selector">
+                    <label for="quantity-{{ product.id }}">Quantitat:</label>
+                    <input 
+                        type="number" 
+                        id="quantity-{{ product.id }}" 
+                        name="quantity" 
+                        value="1" 
+                        min="1" 
+                        max="5" 
+                        required
+                        title="Selecciona entre 1 i 5 unitats"
+                    >
+                </div>
+                <button type="submit" class="btn btn-primary">Afegir al Carretó</button>
+            </form>
+            {% else %}
+            <button class="btn btn-disabled" disabled>No Disponible</button>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No hi ha productes disponibles en aquest moment.</p>
+</div>
+{% endif %}
+{% endblock %}
+
