@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Carretó - TechShop{% endblock %}
+
+{% block content %}
+<h1>El Teu Carretó</h1>
+
+{% if cart_details.cart_items %}
+<div class="cart-container">
+    <div class="cart-items">
+        {% for item in cart_details.cart_items %}
+        <div class="cart-item">
+            <div class="cart-item-info">
+                <h3>{{ item.product.name }}</h3>
+                <p class="item-price">{{ "%.2f"|format(item.product.price) }} € / unitat</p>
+            </div>
+            <div class="cart-item-quantity">
+                <form action="{{ url_for('cart.update_cart_quantity', product_id=item.product.id) }}" 
+                      method="POST" 
+                      class="quantity-form">
+                    <label for="quantity-{{ item.product.id }}">Quantitat:</label>
+                    <input 
+                        type="number" 
+                        id="quantity-{{ item.product.id }}" 
+                        name="quantity" 
+                        value="{{ item.quantity }}" 
+                        min="1" 
+                        max="5" 
+                        required
+                        title="Selecciona entre 1 i 5 unitats"
+                    >
+                    <button type="submit" class="btn btn-small">Actualitzar</button>
+                </form>
+            </div>
+            <div class="cart-item-subtotal">
+                <p class="subtotal">{{ "%.2f"|format(item.subtotal) }} €</p>
+            </div>
+            <div class="cart-item-actions">
+                <form action="{{ url_for('cart.remove_from_cart', product_id=item.product.id) }}" 
+                      method="POST" 
+                      class="remove-form">
+                    <button type="submit" class="btn btn-danger btn-small">Eliminar</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="cart-summary">
+        <h2>Resum de la Comanda</h2>
+        <div class="summary-line">
+            <span>Subtotal:</span>
+            <span class="summary-amount">{{ "%.2f"|format(cart_details.total) }} €</span>
+        </div>
+        <div class="summary-line total">
+            <span>Total:</span>
+            <span class="summary-amount">{{ "%.2f"|format(cart_details.total) }} €</span>
+        </div>
+        <div class="summary-actions">
+            <a href="{{ url_for('orders.checkout') }}" class="btn btn-primary btn-large">Finalitzar Compra</a>
+            <form action="{{ url_for('cart.clear_cart') }}" method="POST" style="margin-top: 10px;">
+                <button type="submit" class="btn btn-secondary btn-large" 
+                        onclick="return confirm('Estàs segur que vols buidar el carretó?')">
+                    Buidar Carretó
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>El teu carretó està buit.</p>
+    <a href="{{ url_for('products.show_products') }}" class="btn btn-primary">Explorar Productes</a>
+</div>
+{% endif %}
+{% endblock %}
+

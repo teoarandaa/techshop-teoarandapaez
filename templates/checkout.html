@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Finalitzar Compra - TechShop{% endblock %}
+
+{% block content %}
+<h1>Finalitzar Compra</h1>
+
+<div class="checkout-container">
+    <div class="checkout-form">
+        <h2>Dades de l'Usuari</h2>
+        <form action="{{ url_for('orders.place_order') }}" method="POST" id="checkout-form">
+            <div class="form-group">
+                <label for="username">Nom d'usuari *</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    required 
+                    minlength="4" 
+                    maxlength="20"
+                    pattern="[a-zA-Z0-9_]{4,20}"
+                    title="El nom d'usuari ha de tenir entre 4 i 20 caràcters (només lletres, números i guions baixos)"
+                    placeholder="Entre 4 i 20 caràcters"
+                >
+                <small>4-20 caràcters, només lletres, números i guions baixos</small>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contrasenya *</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    minlength="8"
+                    title="La contrasenya ha de tenir almenys 8 caràcters"
+                    placeholder="Mínim 8 caràcters"
+                >
+                <small>Mínim 8 caràcters</small>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Correu electrònic *</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    maxlength="100"
+                    title="Introdueix un correu electrònic vàlid"
+                    placeholder="exemple@correu.com"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="address">Adreça d'enviament *</label>
+                <textarea 
+                    id="address" 
+                    name="address" 
+                    required 
+                    rows="3"
+                    minlength="10"
+                    maxlength="200"
+                    title="Introdueix la teva adreça completa (mínim 10 caràcters)"
+                    placeholder="Carrer, número, pis, ciutat, codi postal"
+                ></textarea>
+                <small>Adreça completa d'enviament (10-200 caràcters)</small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-large">Confirmar Comanda</button>
+                <a href="{{ url_for('cart.show_cart') }}" class="btn btn-secondary">Tornar al Carretó</a>
+            </div>
+
+            <p class="form-note">
+                <small>* Camps obligatoris. Si ja tens compte, utilitza les mateixes credencials. 
+                Si ets nou, es crearà un compte automàticament.</small>
+            </p>
+        </form>
+    </div>
+
+    <div class="checkout-summary">
+        <h2>Resum de la Comanda</h2>
+        <div class="summary-items">
+            {% for item in cart_details.cart_items %}
+            <div class="summary-item">
+                <span class="item-name">{{ item.product.name }}</span>
+                <span class="item-quantity">x{{ item.quantity }}</span>
+                <span class="item-price">{{ "%.2f"|format(item.subtotal) }} €</span>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="summary-total">
+            <span>Total:</span>
+            <span class="total-amount">{{ "%.2f"|format(cart_details.total) }} €</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const email = document.getElementById('email').value;
+    const address = document.getElementById('address').value;
+    
+    // Additional client-side validation
+    if (username.length < 4 || username.length > 20) {
+        alert("El nom d'usuari ha de tenir entre 4 i 20 caràcters.");
+        e.preventDefault();
+        return false;
+    }
+    
+    if (password.length < 8) {
+        alert("La contrasenya ha de tenir almenys 8 caràcters.");
+        e.preventDefault();
+        return false;
+    }
+    
+    if (!email.includes('@') || !email.includes('.')) {
+        alert("Introdueix un correu electrònic vàlid.");
+        e.preventDefault();
+        return false;
+    }
+    
+    if (address.length < 10) {
+        alert("L'adreça ha de tenir almenys 10 caràcters.");
+        e.preventDefault();
+        return false;
+    }
+    
+    return true;
+});
+</script>
+{% endblock %}
+
