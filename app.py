@@ -240,8 +240,9 @@ def create_app():
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
     app.config['DATABASE_PATH'] = os.environ.get('DATABASE_PATH', 'techshop.db')
     
-    # Initialize database and seed products if empty
+    # Initialize database, apply migrations and seed if empty
     db.init_db()
+    db.migrate_db()
     _seed_products()
     
     # Register blueprints (routes)
