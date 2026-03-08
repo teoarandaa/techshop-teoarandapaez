@@ -5,7 +5,6 @@ User repository - Data access layer for User entity.
 from typing import Optional, List
 from models.user import User
 from database import db
-from datetime import datetime
 
 
 class UserRepository:
@@ -32,12 +31,13 @@ class UserRepository:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO user (username, password_hash, email, created_at)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO "user" (username, password_hash, email, created_at)
+                VALUES (%s, %s, %s, %s)
+                RETURNING id
                 """,
                 (user.username, user.password_hash, user.email, user.created_at)
             )
-            return cursor.lastrowid
+            return cursor.fetchone()[0]
     
     @staticmethod
     def find_by_id(user_id: int) -> Optional[User]:
@@ -53,18 +53,18 @@ class UserRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM user WHERE id = ?",
+                'SELECT * FROM "user" WHERE id = %s',
                 (user_id,)
             )
             row = cursor.fetchone()
-            
+
             if row:
                 return User(
-                    id=row['id'],
-                    username=row['username'],
-                    password_hash=row['password_hash'],
-                    email=row['email'],
-                    created_at=datetime.fromisoformat(row['created_at'])
+                    id=row[0],
+                    username=row[1],
+                    password_hash=row[2],
+                    email=row[3],
+                    created_at=row[4]
                 )
             return None
     
@@ -82,18 +82,18 @@ class UserRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM user WHERE username = ?",
+                'SELECT * FROM "user" WHERE username = %s',
                 (username,)
             )
             row = cursor.fetchone()
-            
+
             if row:
                 return User(
-                    id=row['id'],
-                    username=row['username'],
-                    password_hash=row['password_hash'],
-                    email=row['email'],
-                    created_at=datetime.fromisoformat(row['created_at'])
+                    id=row[0],
+                    username=row[1],
+                    password_hash=row[2],
+                    email=row[3],
+                    created_at=row[4]
                 )
             return None
     
@@ -111,18 +111,18 @@ class UserRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM user WHERE email = ?",
+                'SELECT * FROM "user" WHERE email = %s',
                 (email,)
             )
             row = cursor.fetchone()
-            
+
             if row:
                 return User(
-                    id=row['id'],
-                    username=row['username'],
-                    password_hash=row['password_hash'],
-                    email=row['email'],
-                    created_at=datetime.fromisoformat(row['created_at'])
+                    id=row[0],
+                    username=row[1],
+                    password_hash=row[2],
+                    email=row[3],
+                    created_at=row[4]
                 )
             return None
     
@@ -136,16 +136,16 @@ class UserRepository:
         """
         with db.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM user")
+            cursor.execute('SELECT * FROM "user"')
             rows = cursor.fetchall()
-            
+
             return [
                 User(
-                    id=row['id'],
-                    username=row['username'],
-                    password_hash=row['password_hash'],
-                    email=row['email'],
-                    created_at=datetime.fromisoformat(row['created_at'])
+                    id=row[0],
+                    username=row[1],
+                    password_hash=row[2],
+                    email=row[3],
+                    created_at=row[4]
                 )
                 for row in rows
             ]

@@ -29,11 +29,12 @@ class ProductRepository:
             cursor.execute(
                 """
                 INSERT INTO product (name, price, stock)
-                VALUES (?, ?, ?)
+                VALUES (%s, %s, %s)
+                RETURNING id
                 """,
                 (product.name, float(product.price), product.stock)
             )
-            return cursor.lastrowid
+            return cursor.fetchone()[0]
     
     @staticmethod
     def find_by_id(product_id: int) -> Optional[Product]:
@@ -49,17 +50,17 @@ class ProductRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM product WHERE id = ?",
+                "SELECT * FROM product WHERE id = %s",
                 (product_id,)
             )
             row = cursor.fetchone()
-            
+
             if row:
                 return Product(
-                    id=row['id'],
-                    name=row['name'],
-                    price=row['price'],
-                    stock=row['stock']
+                    id=row[0],
+                    name=row[1],
+                    price=row[2],
+                    stock=row[3]
                 )
             return None
     
@@ -75,13 +76,13 @@ class ProductRepository:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM product ORDER BY id")
             rows = cursor.fetchall()
-            
+
             return [
                 Product(
-                    id=row['id'],
-                    name=row['name'],
-                    price=row['price'],
-                    stock=row['stock']
+                    id=row[0],
+                    name=row[1],
+                    price=row[2],
+                    stock=row[3]
                 )
                 for row in rows
             ]
@@ -107,7 +108,7 @@ class ProductRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "UPDATE product SET stock = ? WHERE id = ?",
+                "UPDATE product SET stock = %s WHERE id = %s",
                 (new_stock, product_id)
             )
             return cursor.rowcount > 0
@@ -152,9 +153,9 @@ class ProductRepository:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                UPDATE product 
-                SET name = ?, price = ?, stock = ?
-                WHERE id = ?
+                UPDATE product
+                SET name = %s, price = %s, stock = %s
+                WHERE id = %s
                 """,
                 (product.name, float(product.price), product.stock, product.id)
             )
@@ -174,7 +175,7 @@ class ProductRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "DELETE FROM product WHERE id = ?",
+                "DELETE FROM product WHERE id = %s",
                 (product_id,)
             )
             return cursor.rowcount > 0
