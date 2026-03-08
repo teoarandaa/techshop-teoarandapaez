@@ -4,7 +4,7 @@ Main application entry point implementing MVC architecture.
 """
 
 import os
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, request
 from database import db
 from routes.product_routes import product_bp
 from routes.cart_routes import cart_bp
@@ -251,6 +251,18 @@ def create_app():
     app.register_blueprint(order_bp)
     app.register_blueprint(odata_bp)
     
+    @app.route('/admin/reset')
+    def admin_reset():
+        key = request.args.get('key', '')
+        if key != app.config['SECRET_KEY']:
+            return 'Accés denegat', 403
+        try:
+            db.reset_db()
+            _seed_products()
+            return 'Reset i seed completats correctament!', 200
+        except Exception as e:
+            return f'Error: {e}', 500
+
     # Home route
     @app.route('/')
     def index():
