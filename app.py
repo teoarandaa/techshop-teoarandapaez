@@ -10,6 +10,34 @@ from routes.product_routes import product_bp
 from routes.cart_routes import cart_bp
 from routes.order_routes import order_bp
 from routes.odata_routes import odata_bp
+from repositories.product_repository import ProductRepository
+from models.product import Product
+
+
+def _seed_products():
+    """Insert sample products if the table is empty."""
+    if ProductRepository.get_all():
+        return
+    sample_products = [
+        Product(name="iPhone 15 Pro",         price=1199.00, stock=15),
+        Product(name="Samsung Galaxy S24",     price=999.00,  stock=20),
+        Product(name="MacBook Air M2",         price=1299.00, stock=10),
+        Product(name='iPad Pro 12.9"',         price=1099.00, stock=12),
+        Product(name="Sony WH-1000XM5",        price=399.00,  stock=25),
+        Product(name="Apple Watch Series 9",   price=449.00,  stock=18),
+        Product(name="Dell XPS 15",            price=1799.00, stock=8),
+        Product(name="AirPods Pro 2",          price=279.00,  stock=30),
+        Product(name="Nintendo Switch OLED",   price=349.00,  stock=22),
+        Product(name="PlayStation 5",          price=549.00,  stock=5),
+        Product(name='Samsung 4K Monitor 27"', price=399.00,  stock=14),
+        Product(name="Logitech MX Master 3S",  price=99.00,   stock=35),
+        Product(name="iPad Mini 6",            price=549.00,  stock=16),
+        Product(name="Kindle Paperwhite",      price=149.00,  stock=40),
+        Product(name="GoPro Hero 12",          price=399.00,  stock=11),
+    ]
+    for product in sample_products:
+        ProductRepository.create(product)
+    print(f"✓ {len(sample_products)} productes inserits a la base de dades")
 
 
 def create_app():
@@ -26,8 +54,9 @@ def create_app():
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
     app.config['DATABASE_PATH'] = os.environ.get('DATABASE_PATH', 'techshop.db')
     
-    # Initialize database
+    # Initialize database and seed products if empty
     db.init_db()
+    _seed_products()
     
     # Register blueprints (routes)
     app.register_blueprint(product_bp)
