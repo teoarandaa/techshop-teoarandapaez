@@ -3,6 +3,9 @@ Database initialization script.
 Creates database schema and populates with sample data for testing.
 """
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from database import db
 from models.product import Product
 from repositories.product_repository import ProductRepository
