@@ -254,7 +254,8 @@ def create_app():
     @app.route('/admin/reset')
     def admin_reset():
         key = request.args.get('key', '')
-        if key != app.config['SECRET_KEY']:
+        admin_key = os.environ.get('ADMIN_RESET_KEY', 'techshop-reset-2026')
+        if key != admin_key:
             return 'Accés denegat', 403
         try:
             db.reset_db()
