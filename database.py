@@ -4,8 +4,7 @@ Handles PostgreSQL database connection and initialization.
 """
 
 import os
-import psycopg2
-import psycopg2.extras
+import psycopg
 from contextlib import contextmanager
 
 
@@ -23,7 +22,7 @@ class Database:
         Context manager for database connections.
         Ensures proper connection cleanup and transaction management.
         """
-        conn = psycopg2.connect(self.database_url)
+        conn = psycopg.connect(self.database_url)
         conn.autocommit = False
         try:
             yield conn
