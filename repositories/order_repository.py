@@ -28,11 +28,12 @@ class OrderRepository:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO "order" (total, created_at, user_id)
-                VALUES (%s, %s, %s)
+                INSERT INTO "order" (total, created_at, user_id, ciutat, provincia, pais)
+                VALUES (%s, %s, %s, %s, %s, %s)
                 RETURNING id
                 """,
-                (float(order.total), order.created_at, order.user_id)
+                (float(order.total), order.created_at, order.user_id,
+                 order.ciutat, order.provincia, order.pais)
             )
             return cursor.fetchone()[0]
     
@@ -57,10 +58,8 @@ class OrderRepository:
 
             if row:
                 return Order(
-                    id=row[0],
-                    total=row[1],
-                    user_id=row[3],
-                    created_at=row[2]
+                    id=row[0], total=row[1], created_at=row[2], user_id=row[3],
+                    ciutat=row[4] or '', provincia=row[5] or '', pais=row[6] or ''
                 )
             return None
     
@@ -85,14 +84,12 @@ class OrderRepository:
 
             return [
                 Order(
-                    id=row[0],
-                    total=row[1],
-                    user_id=row[3],
-                    created_at=row[2]
+                    id=row[0], total=row[1], created_at=row[2], user_id=row[3],
+                    ciutat=row[4] or '', provincia=row[5] or '', pais=row[6] or ''
                 )
                 for row in rows
             ]
-    
+
     @staticmethod
     def get_all() -> List[Order]:
         """
@@ -108,10 +105,8 @@ class OrderRepository:
 
             return [
                 Order(
-                    id=row[0],
-                    total=row[1],
-                    user_id=row[3],
-                    created_at=row[2]
+                    id=row[0], total=row[1], created_at=row[2], user_id=row[3],
+                    ciutat=row[4] or '', provincia=row[5] or '', pais=row[6] or ''
                 )
                 for row in rows
             ]

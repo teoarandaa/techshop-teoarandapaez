@@ -23,42 +23,33 @@ class Order:
         total: float,
         user_id: int,
         id: Optional[int] = None,
-        created_at: Optional[datetime] = None
+        created_at: Optional[datetime] = None,
+        ciutat: str = '',
+        provincia: str = '',
+        pais: str = ''
     ):
-        """
-        Initialize an Order instance.
-        
-        Args:
-            total: Total amount of the order
-            user_id: ID of the user who placed the order
-            id: Order ID (auto-generated if None)
-            created_at: Creation timestamp (defaults to now if None)
-        
-        Raises:
-            ValueError: If total is negative or user_id is invalid
-        """
         if total < 0:
             raise ValueError("Total cannot be negative")
         if user_id is None or user_id <= 0:
             raise ValueError("Invalid user_id")
-        
+
         self.id = id
         self.total = Decimal(str(total))
         self.user_id = user_id
         self.created_at = created_at or datetime.now()
-    
+        self.ciutat = ciutat
+        self.provincia = provincia
+        self.pais = pais
+
     def to_dict(self) -> dict:
-        """
-        Convert Order instance to dictionary.
-        
-        Returns:
-            dict: Dictionary representation of the order
-        """
         return {
             'id': self.id,
             'total': float(self.total),
             'user_id': self.user_id,
-            'created_at': self.created_at.isoformat() if self.created_at else None
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'ciutat': self.ciutat,
+            'provincia': self.provincia,
+            'pais': self.pais,
         }
     
     def __repr__(self) -> str:

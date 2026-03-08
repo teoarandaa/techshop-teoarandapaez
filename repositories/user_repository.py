@@ -31,11 +31,12 @@ class UserRepository:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO "user" (username, password_hash, email, created_at)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO "user" (username, password_hash, email, created_at, edat, segment, ciutat, provincia, pais)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
                 """,
-                (user.username, user.password_hash, user.email, user.created_at)
+                (user.username, user.password_hash, user.email, user.created_at,
+                 user.edat, user.segment, user.ciutat, user.provincia, user.pais)
             )
             return cursor.fetchone()[0]
     
@@ -60,14 +61,13 @@ class UserRepository:
 
             if row:
                 return User(
-                    id=row[0],
-                    username=row[1],
-                    password_hash=row[2],
-                    email=row[3],
-                    created_at=row[4]
+                    id=row[0], username=row[1], password_hash=row[2],
+                    email=row[3], created_at=row[4],
+                    edat=row[5], segment=row[6] or '',
+                    ciutat=row[7] or '', provincia=row[8] or '', pais=row[9] or ''
                 )
             return None
-    
+
     @staticmethod
     def find_by_username(username: str) -> Optional[User]:
         """
@@ -89,14 +89,13 @@ class UserRepository:
 
             if row:
                 return User(
-                    id=row[0],
-                    username=row[1],
-                    password_hash=row[2],
-                    email=row[3],
-                    created_at=row[4]
+                    id=row[0], username=row[1], password_hash=row[2],
+                    email=row[3], created_at=row[4],
+                    edat=row[5], segment=row[6] or '',
+                    ciutat=row[7] or '', provincia=row[8] or '', pais=row[9] or ''
                 )
             return None
-    
+
     @staticmethod
     def find_by_email(email: str) -> Optional[User]:
         """
@@ -118,14 +117,13 @@ class UserRepository:
 
             if row:
                 return User(
-                    id=row[0],
-                    username=row[1],
-                    password_hash=row[2],
-                    email=row[3],
-                    created_at=row[4]
+                    id=row[0], username=row[1], password_hash=row[2],
+                    email=row[3], created_at=row[4],
+                    edat=row[5], segment=row[6] or '',
+                    ciutat=row[7] or '', provincia=row[8] or '', pais=row[9] or ''
                 )
             return None
-    
+
     @staticmethod
     def get_all() -> List[User]:
         """
@@ -141,11 +139,10 @@ class UserRepository:
 
             return [
                 User(
-                    id=row[0],
-                    username=row[1],
-                    password_hash=row[2],
-                    email=row[3],
-                    created_at=row[4]
+                    id=row[0], username=row[1], password_hash=row[2],
+                    email=row[3], created_at=row[4],
+                    edat=row[5], segment=row[6] or '',
+                    ciutat=row[7] or '', provincia=row[8] or '', pais=row[9] or ''
                 )
                 for row in rows
             ]

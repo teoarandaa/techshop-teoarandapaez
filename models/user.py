@@ -24,36 +24,35 @@ class User:
         password_hash: str,
         email: str,
         id: Optional[int] = None,
-        created_at: Optional[datetime] = None
+        created_at: Optional[datetime] = None,
+        edat: Optional[int] = None,
+        segment: str = '',
+        ciutat: str = '',
+        provincia: str = '',
+        pais: str = ''
     ):
-        """
-        Initialize a User instance.
-        
-        Args:
-            username: Username (4-20 characters)
-            password_hash: Hashed password
-            email: User's email address
-            id: User ID (auto-generated if None)
-            created_at: Creation timestamp (defaults to now if None)
-        """
         self.id = id
         self.username = username
         self.password_hash = password_hash
         self.email = email
         self.created_at = created_at or datetime.now()
-    
+        self.edat = edat
+        self.segment = segment
+        self.ciutat = ciutat
+        self.provincia = provincia
+        self.pais = pais
+
     def to_dict(self) -> dict:
-        """
-        Convert User instance to dictionary.
-        
-        Returns:
-            dict: Dictionary representation of the user (without password_hash)
-        """
         return {
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'created_at': self.created_at.isoformat() if self.created_at else None
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'edat': self.edat,
+            'segment': self.segment,
+            'ciutat': self.ciutat,
+            'provincia': self.provincia,
+            'pais': self.pais,
         }
     
     def __repr__(self) -> str:
