@@ -29,11 +29,12 @@ class OrderItemRepository:
             cursor.execute(
                 """
                 INSERT INTO order_item (order_id, product_id, quantity)
-                VALUES (?, ?, ?)
+                VALUES (%s, %s, %s)
+                RETURNING id
                 """,
                 (order_item.order_id, order_item.product_id, order_item.quantity)
             )
-            return cursor.lastrowid
+            return cursor.fetchone()[0]
     
     @staticmethod
     def find_by_id(item_id: int) -> Optional[OrderItem]:
@@ -49,17 +50,17 @@ class OrderItemRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM order_item WHERE id = ?",
+                "SELECT * FROM order_item WHERE id = %s",
                 (item_id,)
             )
             row = cursor.fetchone()
-            
+
             if row:
                 return OrderItem(
-                    id=row['id'],
-                    order_id=row['order_id'],
-                    product_id=row['product_id'],
-                    quantity=row['quantity']
+                    id=row[0],
+                    order_id=row[1],
+                    product_id=row[2],
+                    quantity=row[3]
                 )
             return None
     
@@ -77,17 +78,17 @@ class OrderItemRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM order_item WHERE order_id = ?",
+                "SELECT * FROM order_item WHERE order_id = %s",
                 (order_id,)
             )
             rows = cursor.fetchall()
-            
+
             return [
                 OrderItem(
-                    id=row['id'],
-                    order_id=row['order_id'],
-                    product_id=row['product_id'],
-                    quantity=row['quantity']
+                    id=row[0],
+                    order_id=row[1],
+                    product_id=row[2],
+                    quantity=row[3]
                 )
                 for row in rows
             ]
@@ -104,13 +105,13 @@ class OrderItemRepository:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM order_item")
             rows = cursor.fetchall()
-            
+
             return [
                 OrderItem(
-                    id=row['id'],
-                    order_id=row['order_id'],
-                    product_id=row['product_id'],
-                    quantity=row['quantity']
+                    id=row[0],
+                    order_id=row[1],
+                    product_id=row[2],
+                    quantity=row[3]
                 )
                 for row in rows
             ]

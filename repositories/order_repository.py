@@ -5,7 +5,6 @@ Order repository - Data access layer for Order entity.
 from typing import Optional, List
 from models.order import Order
 from database import db
-from datetime import datetime
 
 
 class OrderRepository:
@@ -29,12 +28,13 @@ class OrderRepository:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO 'order' (total, created_at, user_id)
-                VALUES (?, ?, ?)
+                INSERT INTO "order" (total, created_at, user_id)
+                VALUES (%s, %s, %s)
+                RETURNING id
                 """,
                 (float(order.total), order.created_at, order.user_id)
             )
-            return cursor.lastrowid
+            return cursor.fetchone()[0]
     
     @staticmethod
     def find_by_id(order_id: int) -> Optional[Order]:
@@ -50,17 +50,17 @@ class OrderRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM 'order' WHERE id = ?",
+                'SELECT * FROM "order" WHERE id = %s',
                 (order_id,)
             )
             row = cursor.fetchone()
-            
+
             if row:
                 return Order(
-                    id=row['id'],
-                    total=row['total'],
-                    user_id=row['user_id'],
-                    created_at=datetime.fromisoformat(row['created_at'])
+                    id=row[0],
+                    total=row[1],
+                    user_id=row[3],
+                    created_at=row[2]
                 )
             return None
     
@@ -78,17 +78,17 @@ class OrderRepository:
         with db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM 'order' WHERE user_id = ? ORDER BY created_at DESC",
+                'SELECT * FROM "order" WHERE user_id = %s ORDER BY created_at DESC',
                 (user_id,)
             )
             rows = cursor.fetchall()
-            
+
             return [
                 Order(
-                    id=row['id'],
-                    total=row['total'],
-                    user_id=row['user_id'],
-                    created_at=datetime.fromisoformat(row['created_at'])
+                    id=row[0],
+                    total=row[1],
+                    user_id=row[3],
+                    created_at=row[2]
                 )
                 for row in rows
             ]
@@ -103,15 +103,15 @@ class OrderRepository:
         """
         with db.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM 'order' ORDER BY created_at DESC")
+            cursor.execute('SELECT * FROM "order" ORDER BY created_at DESC')
             rows = cursor.fetchall()
-            
+
             return [
                 Order(
-                    id=row['id'],
-                    total=row['total'],
-                    user_id=row['user_id'],
-                    created_at=datetime.fromisoformat(row['created_at'])
+                    id=row[0],
+                    total=row[1],
+                    user_id=row[3],
+                    created_at=row[2]
                 )
                 for row in rows
             ]
