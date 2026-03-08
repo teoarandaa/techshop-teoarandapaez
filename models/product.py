@@ -22,42 +22,30 @@ class Product:
         name: str,
         price: float,
         stock: int,
+        categoria: str = '',
+        subcategoria: str = '',
         id: Optional[int] = None
     ):
-        """
-        Initialize a Product instance.
-        
-        Args:
-            name: Product name
-            price: Product price
-            stock: Available units in inventory
-            id: Product ID (auto-generated if None)
-        
-        Raises:
-            ValueError: If price is negative or stock is negative
-        """
         if price < 0:
             raise ValueError("Price cannot be negative")
         if stock < 0:
             raise ValueError("Stock cannot be negative")
-        
+
         self.id = id
         self.name = name
         self.price = Decimal(str(price))
         self.stock = stock
-    
+        self.categoria = categoria
+        self.subcategoria = subcategoria
+
     def to_dict(self) -> dict:
-        """
-        Convert Product instance to dictionary.
-        
-        Returns:
-            dict: Dictionary representation of the product
-        """
         return {
             'id': self.id,
             'name': self.name,
             'price': float(self.price),
-            'stock': self.stock
+            'stock': self.stock,
+            'categoria': self.categoria,
+            'subcategoria': self.subcategoria,
         }
     
     def is_available(self, quantity: int) -> bool:
@@ -73,5 +61,5 @@ class Product:
         return self.stock >= quantity
     
     def __repr__(self) -> str:
-        return f"<Product(id={self.id}, name='{self.name}', price={self.price}, stock={self.stock})>"
+        return f"<Product(id={self.id}, name='{self.name}', categoria='{self.categoria}', price={self.price}, stock={self.stock})>"
 

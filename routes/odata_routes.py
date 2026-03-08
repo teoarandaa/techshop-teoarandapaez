@@ -52,10 +52,12 @@ def metadata():
     <Schema Namespace="TechShop" xmlns="http://docs.oasis-open.org/odata/ns/edm">
       <EntityType Name="Product">
         <Key><PropertyRef Name="id"/></Key>
-        <Property Name="id"    Type="Edm.Int32"   Nullable="false"/>
-        <Property Name="name"  Type="Edm.String"/>
-        <Property Name="price" Type="Edm.Decimal"/>
-        <Property Name="stock" Type="Edm.Int32"/>
+        <Property Name="id"           Type="Edm.Int32"   Nullable="false"/>
+        <Property Name="name"         Type="Edm.String"/>
+        <Property Name="price"        Type="Edm.Decimal"/>
+        <Property Name="stock"        Type="Edm.Int32"/>
+        <Property Name="categoria"    Type="Edm.String"/>
+        <Property Name="subcategoria" Type="Edm.String"/>
       </EntityType>
       <EntityType Name="Order">
         <Key><PropertyRef Name="id"/></Key>
@@ -63,6 +65,9 @@ def metadata():
         <Property Name="total"      Type="Edm.Decimal"/>
         <Property Name="created_at" Type="Edm.DateTimeOffset"/>
         <Property Name="user_id"    Type="Edm.Int32"/>
+        <Property Name="ciutat"     Type="Edm.String"/>
+        <Property Name="provincia"  Type="Edm.String"/>
+        <Property Name="pais"       Type="Edm.String"/>
       </EntityType>
       <EntityType Name="OrderItem">
         <Key><PropertyRef Name="id"/></Key>
@@ -77,6 +82,11 @@ def metadata():
         <Property Name="username"   Type="Edm.String"/>
         <Property Name="email"      Type="Edm.String"/>
         <Property Name="created_at" Type="Edm.DateTimeOffset"/>
+        <Property Name="edat"       Type="Edm.Int32"/>
+        <Property Name="segment"    Type="Edm.String"/>
+        <Property Name="ciutat"     Type="Edm.String"/>
+        <Property Name="provincia"  Type="Edm.String"/>
+        <Property Name="pais"       Type="Edm.String"/>
       </EntityType>
       <EntityContainer Name="TechShopContainer">
         <EntitySet Name="products"    EntityType="TechShop.Product"/>

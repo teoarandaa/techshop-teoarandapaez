@@ -28,11 +28,11 @@ class ProductRepository:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO product (name, price, stock)
-                VALUES (%s, %s, %s)
+                INSERT INTO product (name, price, stock, categoria, subcategoria)
+                VALUES (%s, %s, %s, %s, %s)
                 RETURNING id
                 """,
-                (product.name, float(product.price), product.stock)
+                (product.name, float(product.price), product.stock, product.categoria, product.subcategoria)
             )
             return cursor.fetchone()[0]
     
@@ -60,7 +60,9 @@ class ProductRepository:
                     id=row[0],
                     name=row[1],
                     price=row[2],
-                    stock=row[3]
+                    stock=row[3],
+                    categoria=row[4] or '',
+                    subcategoria=row[5] or '',
                 )
             return None
     
@@ -82,7 +84,9 @@ class ProductRepository:
                     id=row[0],
                     name=row[1],
                     price=row[2],
-                    stock=row[3]
+                    stock=row[3],
+                    categoria=row[4] or '',
+                    subcategoria=row[5] or '',
                 )
                 for row in rows
             ]
@@ -154,10 +158,10 @@ class ProductRepository:
             cursor.execute(
                 """
                 UPDATE product
-                SET name = %s, price = %s, stock = %s
+                SET name = %s, price = %s, stock = %s, categoria = %s, subcategoria = %s
                 WHERE id = %s
                 """,
-                (product.name, float(product.price), product.stock, product.id)
+                (product.name, float(product.price), product.stock, product.categoria, product.subcategoria, product.id)
             )
             return cursor.rowcount > 0
     

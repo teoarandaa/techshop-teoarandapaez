@@ -47,7 +47,12 @@ class Database:
                     username VARCHAR(20) NOT NULL UNIQUE,
                     password_hash VARCHAR(60) NOT NULL,
                     email VARCHAR(100) NOT NULL UNIQUE,
-                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    edat INTEGER,
+                    segment VARCHAR(50),
+                    ciutat VARCHAR(100),
+                    provincia VARCHAR(100),
+                    pais VARCHAR(100)
                 )
             """)
 
@@ -56,7 +61,9 @@ class Database:
                     id SERIAL PRIMARY KEY,
                     name VARCHAR(100) NOT NULL,
                     price NUMERIC(10,2) NOT NULL CHECK(price >= 0),
-                    stock INTEGER NOT NULL CHECK(stock >= 0)
+                    stock INTEGER NOT NULL CHECK(stock >= 0),
+                    categoria VARCHAR(100),
+                    subcategoria VARCHAR(100)
                 )
             """)
 
@@ -66,6 +73,9 @@ class Database:
                     total NUMERIC(10,2) NOT NULL CHECK(total >= 0),
                     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     user_id INTEGER NOT NULL,
+                    ciutat VARCHAR(100),
+                    provincia VARCHAR(100),
+                    pais VARCHAR(100),
                     FOREIGN KEY (user_id) REFERENCES "user"(id)
                 )
             """)
