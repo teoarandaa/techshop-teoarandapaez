@@ -9,6 +9,7 @@ from database import db
 from routes.product_routes import product_bp
 from routes.cart_routes import cart_bp
 from routes.order_routes import order_bp
+from routes.odata_routes import odata_bp
 
 
 def create_app():
@@ -32,6 +33,7 @@ def create_app():
     app.register_blueprint(product_bp)
     app.register_blueprint(cart_bp)
     app.register_blueprint(order_bp)
+    app.register_blueprint(odata_bp)
     
     # Home route
     @app.route('/')
