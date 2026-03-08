@@ -3,7 +3,7 @@ OData v4 endpoints for Tableau Public integration.
 Exposes products, orders, order_items and users as OData feeds.
 """
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, make_response
 from repositories.product_repository import ProductRepository
 from repositories.order_repository import OrderRepository
 from repositories.order_item_repository import OrderItemRepository
@@ -11,16 +11,28 @@ from repositories.user_repository import UserRepository
 
 odata_bp = Blueprint('odata', __name__, url_prefix='/odata')
 
+ODATA_HEADERS = {
+    'OData-Version': '4.0',
+    'Content-Type': 'application/json;odata.metadata=minimal;odata.streaming=true',
+}
+
 
 def _base_url():
     return request.host_url.rstrip('/')
+
+
+def _odata_response(data):
+    resp = make_response(jsonify(data))
+    for k, v in ODATA_HEADERS.items():
+        resp.headers[k] = v
+    return resp
 
 
 @odata_bp.route('/', methods=['GET'])
 def service_document():
     """OData service document — lists all available entity sets."""
     base = _base_url()
-    return jsonify({
+    return _odata_response({
         "@odata.context": f"{base}/odata/$metadata",
         "value": [
             {"name": "products",    "kind": "EntitySet", "url": "products"},
@@ -75,13 +87,16 @@ def metadata():
     </Schema>
   </edmx:DataServices>
 </edmx:Edmx>'''
-    return xml, 200, {'Content-Type': 'application/xml'}
+    return xml, 200, {
+        'Content-Type': 'application/xml',
+        'OData-Version': '4.0',
+    }
 
 
 @odata_bp.route('/products', methods=['GET'])
 def get_products():
     products = ProductRepository.get_all()
-    return jsonify({
+    return _odata_response({
         "@odata.context": f"{_base_url()}/odata/$metadata#products",
         "value": [p.to_dict() for p in products]
     })
@@ -90,7 +105,7 @@ def get_products():
 @odata_bp.route('/orders', methods=['GET'])
 def get_orders():
     orders = OrderRepository.get_all()
-    return jsonify({
+    return _odata_response({
         "@odata.context": f"{_base_url()}/odata/$metadata#orders",
         "value": [o.to_dict() for o in orders]
     })
@@ -99,7 +114,7 @@ def get_orders():
 @odata_bp.route('/order_items', methods=['GET'])
 def get_order_items():
     items = OrderItemRepository.get_all()
-    return jsonify({
+    return _odata_response({
         "@odata.context": f"{_base_url()}/odata/$metadata#order_items",
         "value": [i.to_dict() for i in items]
     })
@@ -108,7 +123,7 @@ def get_order_items():
 @odata_bp.route('/users', methods=['GET'])
 def get_users():
     users = UserRepository.get_all()
-    return jsonify({
+    return _odata_response({
         "@odata.context": f"{_base_url()}/odata/$metadata#users",
         "value": [u.to_dict() for u in users]
     })
