@@ -91,6 +91,28 @@ class Database:
                 )
             """)
 
+    def migrate_db(self):
+        """
+        Add missing columns to existing tables without losing data.
+        Safe to run on every startup.
+        """
+        migrations = [
+            ('product',  'categoria',    'ALTER TABLE product ADD COLUMN IF NOT EXISTS categoria VARCHAR(100)'),
+            ('product',  'subcategoria', 'ALTER TABLE product ADD COLUMN IF NOT EXISTS subcategoria VARCHAR(100)'),
+            ('"user"',   'edat',         'ALTER TABLE "user" ADD COLUMN IF NOT EXISTS edat INTEGER'),
+            ('"user"',   'segment',      'ALTER TABLE "user" ADD COLUMN IF NOT EXISTS segment VARCHAR(50)'),
+            ('"user"',   'ciutat',       'ALTER TABLE "user" ADD COLUMN IF NOT EXISTS ciutat VARCHAR(100)'),
+            ('"user"',   'provincia',    'ALTER TABLE "user" ADD COLUMN IF NOT EXISTS provincia VARCHAR(100)'),
+            ('"user"',   'pais',         'ALTER TABLE "user" ADD COLUMN IF NOT EXISTS pais VARCHAR(100)'),
+            ('"order"',  'ciutat',       'ALTER TABLE "order" ADD COLUMN IF NOT EXISTS ciutat VARCHAR(100)'),
+            ('"order"',  'provincia',    'ALTER TABLE "order" ADD COLUMN IF NOT EXISTS provincia VARCHAR(100)'),
+            ('"order"',  'pais',         'ALTER TABLE "order" ADD COLUMN IF NOT EXISTS pais VARCHAR(100)'),
+        ]
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            for _, _, sql in migrations:
+                cursor.execute(sql)
+
     def reset_db(self):
         """
         Drop all tables and recreate schema.
